@@ -103,11 +103,18 @@ class App extends React.Component<AppProps, AppState> {
             this.connection.shareData({ type: "mouse-move", x, y });
           }
         );
-        video.addEventListener("mousemove", (e) =>
-          throttleMouseMove(e.offsetX, e.offsetY)
+        video.addEventListener("mousemove", (e: any) =>
+          throttleMouseMove(
+            e.offsetX / e.currentTarget.offsetWidth,
+            e.offsetY / e.currentTarget.offsetHeight
+          )
         );
-        video.addEventListener("mousedown", (e) =>
-          this.connection.shareData({ type: "mouse-click", x: e.offsetX, y: e.offsetY })
+        video.addEventListener("mousedown", (e: any) =>
+          this.connection.shareData({
+            type: "mouse-click",
+            x: e.offsetX / e.currentTarget.offsetWidth,
+            y: e.offsetY / e.currentTarget.offsetHeight,
+          })
         );
       });
     });
