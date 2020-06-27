@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { MrtcFactory, IConnection } from "mark-ind-mrtc";
+import { MrtcFactory, IConnection, Logger } from "mark-ind-mrtc";
+import { throttle } from "throttle-debounce";
 
 import {
   makeStyles,
@@ -11,6 +12,8 @@ import {
   withStyles,
 } from "@material-ui/core";
 
+Logger.configure({ level: "debug" });
+
 const styles = ({ spacing, palette }: Theme) =>
   createStyles({
     root: {
@@ -19,6 +22,8 @@ const styles = ({ spacing, palette }: Theme) =>
       padding: spacing(1),
     },
   });
+
+const video = document.getElementById("video") as HTMLMediaElement;
 
 interface AppProps extends WithStyles<typeof styles> {}
 
@@ -34,11 +39,17 @@ class App extends React.Component<AppProps, AppState> {
 
   constructor(props: any) {
     super(props);
-    this.state = { agentName: "Smith", messages: "", mrtc_connected: false };
+    this.state = initialState;
   }
 
   private handleMessage = () => {
-    this.connection.shareData({ message: "May I call you so we fix this issue together" });
+    this.connection.shareData({
+      message: "May I call you so we fix this issue together",
+    });
+  };
+
+  private handleClick = () => {
+    this.connection.shareData({ type: "mouse-click", x: 100, y: 100 });
   };
 
   private handlePhoneCall = async () => {
@@ -48,14 +59,17 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   private handleScreenShare = () => {
-    this.connection.shareData({type:'screen-share'});
+    this.connection.shareData({ type: "screen-share" });
   };
 
   private handleConnectMrtc = async () => {
-    this.setState({ mrtc_connected: true });
-
     const mrtc = MrtcFactory.build();
-    await mrtc.connectServer(`td-agent-${this.state.agentName}`);
+    await mrtc.connectServer(`td-agent-${this.state.agentName}`, {
+      host: "localhost",
+      port: 9000,
+      path: "/myapp",
+    });
+    this.setState({ mrtc_connected: true });
 
     mrtc.onRemoteConnection.sub((c) => {
       console.debug("onRemoteConnection ", c);
@@ -66,7 +80,8 @@ class App extends React.Component<AppProps, AppState> {
       this.connection.onData.sub((c, d: any) => {
         console.log("Peer message", d);
         switch (d.type) {
-          default://message
+          default:
+            //message
             this.setState({ messages: `${d.message}\n${this.state.messages}` });
         }
       });
@@ -78,8 +93,22 @@ class App extends React.Component<AppProps, AppState> {
       });
       this.connection.onScreenShared.sub((c, m) => {
         console.info(`onScreenShared`, m);
-        const video = document.getElementById("video") as HTMLMediaElement;
         video.srcObject = m.stream;
+
+        const throttleMouseMove = throttle(
+          1000,
+          true,
+          (x: number, y: number) => {
+            console.log(`${x} ${y}`);
+            this.connection.shareData({ type: "mouse-move", x, y });
+          }
+        );
+        video.addEventListener("mousemove", (e) =>
+          throttleMouseMove(e.offsetX, e.offsetY)
+        );
+        video.addEventListener("mousedown", (e) =>
+          this.connection.shareData({ type: "mouse-click", x: e.offsetX, y: e.offsetY })
+        );
       });
     });
 
@@ -113,6 +142,9 @@ class App extends React.Component<AppProps, AppState> {
             </Button>
             <Button onClick={this.handleScreenShare} color="primary">
               Ask Screen Share
+            </Button>
+            <Button onClick={this.handleClick} color="primary">
+              Send Click
             </Button>
           </>
         ) : (
