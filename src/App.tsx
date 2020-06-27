@@ -96,7 +96,7 @@ class App extends React.Component<AppProps, AppState> {
         video.srcObject = m.stream;
 
         const throttleMouseMove = throttle(
-          1000,
+          200,
           true,
           (x: number, y: number) => {
             console.log(`${x} ${y}`);
