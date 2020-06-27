@@ -66,12 +66,6 @@ class App extends React.Component<AppProps, AppState> {
       this.connection.onData.sub((c, d: any) => {
         console.log("Peer message", d);
         switch (d.type) {
-          case "mouse-click":
-            break;
-          case "mouse-move":
-            break;
-          case "mouse-draw":
-            break;
           default://message
             this.setState({ messages: `${d.message}\n${this.state.messages}` });
         }
