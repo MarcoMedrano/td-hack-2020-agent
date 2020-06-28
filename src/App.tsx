@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { MrtcFactory, IConnection, Logger } from "mark-ind-mrtc";
 import { throttle } from "throttle-debounce";
 
 import {
-  makeStyles,
   Theme,
   createStyles,
   WithStyles,
@@ -54,8 +53,8 @@ class App extends React.Component<AppProps, AppState> {
 
   private handlePhoneCall = async () => {
     const mediaConnection = await this.connection.shareAudio({});
-    const audio = document.getElementById("audio") as HTMLMediaElement;
-    audio.srcObject = mediaConnection.stream;
+    // const audio = document.getElementById("audio") as HTMLMediaElement;
+    // audio.srcObject = mediaConnection.stream;
   };
 
   private handleScreenShare = () => {
@@ -65,9 +64,13 @@ class App extends React.Component<AppProps, AppState> {
   private handleConnectMrtc = async () => {
     const mrtc = MrtcFactory.build();
     await mrtc.connectServer(`td-agent-${this.state.agentName}`, {
-      host: "localhost",
-      port: 9000,
-      path: "/myapp",
+      // host: "localhost",
+      // port: 9000,
+      // path: "/myapp",
+      config: {
+        iceServers: [{ urls: "stun:turn.tdx.sandcitadel.com:443" }],
+        // sdpSemantics: "unified-plan",
+      },
     });
     this.setState({ mrtc_connected: true });
 
