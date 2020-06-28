@@ -10,7 +10,7 @@
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
     "cra-template-typescript": "1.0.3",
-    "mark-ind-mrtc": "0.0.2",
+    "mark-ind-mrtc": "0.0.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",

@@ -7019,10 +7019,10 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-mark-ind-mrtc@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/mark-ind-mrtc/-/mark-ind-mrtc-0.0.2.tgz#5c3a11ce3bfd6b69aa54af2bf13ddb16506137da"
-  integrity sha512-dGzY94Js6SQCNQD+L5BRNHdpsxTyiif0PShGjd85b7tkriMbtqwxY7GxBCk2cFgW17ueYoZoei9mWtnB+8tKoA==
+mark-ind-mrtc@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/mark-ind-mrtc/-/mark-ind-mrtc-0.0.3.tgz#384b81b4124f9da5f9ded387a647c46717da49ef"
+  integrity sha512-Tzd54X4YxU/vrBgC8sVKeLaeuhNY3EcXQ69Ge9O6cKT8KYh35Ke6K3ngqYxX/SExYwKehGXlc6fh8dIxWaZoew==
   dependencies:
     electron "8.2.5"
     inversify "5.0.1"
