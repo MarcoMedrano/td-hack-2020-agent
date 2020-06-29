@@ -15,12 +15,7 @@ import {
   toggleWidget,
 } from "react-chat-widget";
 
-import {
-  Theme,
-  createStyles,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
+import { Theme, createStyles, WithStyles, withStyles } from "@material-ui/core";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import ChatIcon from "@material-ui/icons/Chat";
@@ -46,6 +41,10 @@ const styles = ({ spacing, palette }: Theme) =>
       position: "absolute",
       cursor: "pointer",
       zIndex: 99999,
+    },
+    td: {
+      backgroundColor: "#08314DC0!important",
+      color: "white!important",
     },
   });
 
@@ -164,7 +163,7 @@ class App extends React.Component<AppProps> {
         <SetupDialog />
         {AppStore.mrtc_connected && (
           <>
-            <Draggable handle="strong">
+            <Draggable handle="#td-handle">
               <div className={classes.toolbar}>
                 <ToggleButtonGroup
                   orientation="vertical"
@@ -172,6 +171,8 @@ class App extends React.Component<AppProps> {
                   exclusive
                 >
                   <ToggleButton
+                    id="td-handle"
+                    className={classes.td}
                     value="chat"
                     onClick={() => console.log("clicked")}
                   >
@@ -199,7 +200,7 @@ class App extends React.Component<AppProps> {
           <>
             <Widget
               title=""
-              subtitle=""
+              subtitle="talkdeskhelp"
               showCloseButton={false}
               profileAvatar={AppStore.agentAvatarUrl}
               handleNewUserMessage={this.handleNewUserMessage}
